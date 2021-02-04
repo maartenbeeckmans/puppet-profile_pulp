@@ -1,2 +1,13 @@
 ---
+profile_pulp::manage_repo: true
+profile_pulp::manage_firewall_entry: true
+profile_pulp::manage_sd_service: true
+profile_pulp::sd_service_name: pulpcore
+profile_pulp::sd_service_tags: []
+profile_pulp::data_device: '/dev/vdb'
+profile_pulp::plugins:
+  - container
+  - deb
+  - file
+  - rpm
 ...
