@@ -3,6 +3,7 @@ class profile_pulp (
   Boolean $manage_repo,
   Boolean $manage_firewall_entry,
   Boolean $manage_sd_service,
+  Boolean $manage_apache,
   String  $sd_service_name,
   Array   $sd_service_tags,
   String  $data_device,
@@ -12,13 +13,22 @@ class profile_pulp (
     include pulpcore::repo
   }
 
-  profile_base::mount{ '/var/lib/pulp':
+  exec { '/var/lib/pulp':
+    path    => $::path,
+    command => 'mkdir -p /var/lib/pulp',
+    unless  => 'test -d /var/lib/pulp',
+  }
+  ~> profile_base::mount{ '/var/lib/pulp':
     device => $data_device,
     mkdir  => false,
     before => Class['Pulpcore'],
   }
 
   include pulpcore
+
+  if $manage_apache {
+    include profile_pulp::apache
+  }
 
   if $manage_firewall_entry {
     firewall { '00080 allow pulpcore http':
