@@ -2,9 +2,70 @@
 profile_pulp::manage_repo: true
 profile_pulp::manage_firewall_entry: true
 profile_pulp::manage_sd_service: true
-profile_pulp::manage_apache: true
 profile_pulp::sd_service_name: pulpcore
 profile_pulp::sd_service_tags: []
-profile_pulp::data_device: '/dev/vdb'
-profile_pulp::plugins: []
+profile_pulp::pulp_data_device: '/dev/vdb'
+profile_pulp::postgres_data_device: '/dev/vdc'
+profile_pulp::postgres_backup_device: '/dev/vdd'
+profile_pulp::plugins:
+  - container
+  - deb
+  - file
+  - rpm
+  # Apache config
+profile_pulp::apache_docroot: '/var/lib/pulp/pulpcore_static'
+profile_pulp::apache_servername: "%{facts.networking.fqdn}"
+profile_pulp::apache_serveraliases:
+  - mirror.vagrant.beeckmans.io
+  - registry.vagrant.beeckmans.io
+profile_pulp::apache_docroot_directory:
+  provider: 'Directory'
+  path: "%{hiera('profile_pulp::apache_docroot')}"
+  options:
+    - '-Indexes'
+    - '-FollowSymLinks'
+  allow_override:
+    - 'None'
+profile_pulp::apache_content_directory:
+  path: '/pulp/content'
+  provider: 'location'
+  proxy_pass:
+    - url: 'unix:///run/pulpcore-content.sock|http://pulpcore-content/pulp/content'
+      params:
+        timeout: '600'
+        disablereuse: 'on'
+profile_pulp::apache_api_directory:
+  path: '/pulp/api/v3'
+  provider: 'location'
+  proxy_pass:
+    - url: 'unix:///run/pulpcore-api.sock|http://pulpcore-api/pulp/api/v3'
+      params:
+        timeout: '600'
+  auth_basic_provider: 'file'
+  auth_name: 'pulpcore' 
+  auth_require: 'valid-user'
+  auth_type: 'Basic'
+  auth_user_file: '/etc/httpd/pulpcore.htpasswd'
+  rewrites:
+    - comment: ' Set headers for pulp'
+      rewrite_cond: 
+        - "%{literal('%')}{IS_SUBREQ} ^false$"
+        - "%{literal('%')}{LA-U:REMOTE_USER} (.+)"
+      rewrite_rule: 
+        - '. - [E=RU:%1]'
+  request_headers:
+    - "set REMOTE_USER %{literal('%')}{RU}e"
+profile_pulp::apache_api_directory_status:
+  path: '/pulp/api/v3/status'
+  provider: 'location'
+  proxy_pass:
+    - url: 'unix:///run/pulpcore-api.sock|http://pulpcore-api/pulp/api/v3/status'
+      params:
+        timeout: '600'
+profile_pulp::apache_proxy_pass_static:
+  path: '/assets/'
+  url: 'unix:///run/pulpcore-api.sock|http://pulpcore-api/assets/'
+profile_pulp::apache_basicauth:
+  # admin:secret
+  admin: $apr1$tCgHs3ti$uj/kXLE8tZe4kQCCqTL8S.
 ...
