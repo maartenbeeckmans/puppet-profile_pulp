@@ -13,7 +13,6 @@ class profile_pulp::apache (
   Hash          $proxy_pass_static    = $::profile_pulp::apache_proxy_pass_static,
   Hash          $basicauth            = $::profile_pulp::apache_basicauth,
   Boolean       $manage_sd_service    = $::profile_pulp::manage_sd_service,
-  String        $sd_service_name      = $::profile_pulp::sd_service_name,
   Array         $sd_service_tags      = $::profile_pulp::sd_service_tags,
 ) {
   class { 'profile_apache': }
@@ -44,20 +43,6 @@ class profile_pulp::apache (
     manage_sd_service => $manage_sd_service,
     sd_check_uri      => 'pulp/api/v3/status/',
     sd_service_tags   => $sd_service_tags,
-  }
-
-  if $manage_sd_service {
-    consul::service { $sd_service_name:
-      checks => [
-        {
-          http            => 'https://localhost:443/pulp/api/v3/status/',
-          interval        => '10s',
-          tls_skip_verify => true,
-        }
-      ],
-      port   => 443,
-      tags   => $sd_service_tags,
-    }
   }
 
   file { '/var/lib/pulp/pulpcore_static':
