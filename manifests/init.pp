@@ -70,4 +70,19 @@ class profile_pulp (
   $plugins.each |$plugin| {
     class { "pulpcore::plugin::${plugin}": }
   }
+
+  $helperscripts = [ 'pcurlg', 'pcurlp', 'pcurlf' ]
+
+  $_config = {
+    api_address = $apache_servername,
+    api_port    = '443',
+  }
+
+  helperscripts.each | $script | {
+    file { "/usr/bin/${script}":
+      ensure  => present,
+      mode    => '0755',
+      content => epp("${module_name}/bin/${script}", $_config),
+    }
+  }
 }

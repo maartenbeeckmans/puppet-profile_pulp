@@ -45,9 +45,25 @@ class profile_pulp::apache (
     group  => $::pulpcore::group,
   }
 
-  file { '/etc/httpd/pulpcore.htpasswd':
-    content => join(join_keys_to_values($basicauth, ':'), "\n"),
+  $_basicauth_encrypted = $basicauth.map | $u, $p | { { $u => apache::pw_hash($u) } }
+
+  file { "${::apache::confd_dir}/pulpcore.htpasswd":
+    content => join(join_keys_to_values($_basicauth_encrypted, ':'), "\n"),
     owner   => $::apache::user,
     mode    => '0400',
+  }
+
+  $_netrc_hash = {
+    'servername'     => $servername
+    'admin_username' => keys($basicauth)[0]
+    'admin_password' => values($basicauth)[0]
+  }
+
+  file { '/root/.netrc':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+    content => epp("${module_name}/netrc", $_netrc_hash),
   }
 }

@@ -1,0 +1,9 @@
+<%- | String  $api_address,
+      Integer $api_port
+| -%>
+#!/bin/bash
+
+ARGS=$1
+name=$2
+
+curl -k -s --netrc "http://<%= $api_address -%>:<%= $api_port -%>/pulp/api/v3/${ARGS}/?name=${name}" | jq
