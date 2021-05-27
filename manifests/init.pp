@@ -3,7 +3,6 @@ class profile_pulp (
   Boolean       $manage_repo,
   Boolean       $manage_firewall_entry,
   Boolean       $manage_sd_service,
-  String        $sd_service_name,
   Array         $sd_service_tags,
   String        $pulp_data_device,
   String        $postgres_data_device,
@@ -52,37 +51,9 @@ class profile_pulp (
     apache_https_vhost => false,
   }
 
-
-  if $manage_sd_service {
-    consul::service { $sd_service_name:
-      checks => [
-        {
-          http            => 'https://localhost:443/pulp/api/v3/status/',
-          interval        => '10s',
-          tls_skip_verify => true,
-        }
-      ],
-      port   => 443,
-      tags   => $sd_service_tags,
-    }
-  }
-
   $plugins.each |$plugin| {
     class { "pulpcore::plugin::${plugin}": }
   }
 
-  $helperscripts = [ 'pcurlg', 'pcurlp', 'pcurlf' ]
-
-  $_config = {
-    'api_address' => $apache_servername,
-    'api_port'    => 443,
-  }
-
-  $helperscripts.each | $script | {
-    file { "/usr/bin/${script}":
-      ensure  => present,
-      mode    => '0755',
-      content => epp("${module_name}/bin/${script}", $_config),
-    }
-  }
+  include profile_pulp::helperscripts
 }
