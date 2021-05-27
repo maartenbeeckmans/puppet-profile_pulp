@@ -45,18 +45,20 @@ class profile_pulp::apache (
     group  => $::pulpcore::group,
   }
 
-  $_basicauth_encrypted = $basicauth.map | $u, $p | { { $u => apache::pw_hash($u) } }
+  $_basicauth_encrypted = $basicauth.map | $u, $p | {
+    join([$u, join([':', apache::pw_hash($p)])])
+  }
 
   file { "${::apache::confd_dir}/pulpcore.htpasswd":
-    content => join(join_keys_to_values($_basicauth_encrypted, ':'), "\n"),
+    content => join($_basicauth_encrypted, '\n'),
     owner   => $::apache::user,
     mode    => '0400',
   }
 
   $_netrc_hash = {
-    'servername'     => $servername
-    'admin_username' => keys($basicauth)[0]
-    'admin_password' => values($basicauth)[0]
+    'servername'     => $servername,
+    'admin_username' => keys($basicauth)[0],
+    'admin_password' => values($basicauth)[0],
   }
 
   file { '/root/.netrc':

@@ -6,4 +6,4 @@
 ARGS=$1
 name=$2
 
-curl -k -s --netrc "http://<%= $api_address -%>:<%= $api_port -%>/pulp/api/v3/${ARGS}/?name=${name}" | jq
+curl -k -s --netrc "https://<%= $api_address -%>:<%= $api_port -%>/pulp/api/v3/${ARGS}/?name=${name}" | jq

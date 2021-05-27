@@ -74,11 +74,11 @@ class profile_pulp (
   $helperscripts = [ 'pcurlg', 'pcurlp', 'pcurlf' ]
 
   $_config = {
-    api_address = $apache_servername,
-    api_port    = '443',
+    'api_address' => $apache_servername,
+    'api_port'    => 443,
   }
 
-  helperscripts.each | $script | {
+  $helperscripts.each | $script | {
     file { "/usr/bin/${script}":
       ensure  => present,
       mode    => '0755',

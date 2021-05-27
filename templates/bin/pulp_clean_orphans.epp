@@ -3,13 +3,13 @@
 | -%>
 #!/bin/bash
 
-task=$(curl --netrc -X DELETE -s -H "Content-Type: application/json" http://<%= $api_address -%>:<%= $api_port -%>/pulp/api/v3/orphans/ | jq -r '.task')
+task=$(curl --netrc -X DELETE -s -H "Content-Type: application/json" https://<%= $api_address -%>:<%= $api_port -%>/pulp/api/v3/orphans/ | jq -r '.task')
 
 echo "Waiting until task ${task} is finished"
 
 while true
 do
-  state=$(curl --netrc -s -H "Content-Type: application/json" 'http://<%= $api_address -%>:<%= $api_port -%>'"${task}" | jq -r '.state')
+  state=$(curl --netrc -s -H "Content-Type: application/json" 'https://<%= $api_address -%>:<%= $api_port -%>'"${task}" | jq -r '.state')
   case ${state} in
     failed|canceled)
       echo "Task in final state: ${state}"
