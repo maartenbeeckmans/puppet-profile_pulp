@@ -20,7 +20,9 @@ class profile_pulp (
   Hash                  $apache_basicauth,
 ) {
   if $manage_repo {
-    include profile_pulp::repo
+    class { 'profile_pulp::repo':
+      before => Class['Pulpcore'],
+    }
   }
 
   exec { '/var/lib/pulp':
