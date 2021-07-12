@@ -1,25 +1,26 @@
 #
 class profile_pulp (
-  Boolean       $manage_repo,
-  Boolean       $manage_firewall_entry,
-  Boolean       $manage_sd_service,
-  Array         $sd_service_tags,
-  String        $pulp_data_device,
-  String        $postgres_data_device,
-  String        $postgres_backup_device,
-  Array         $plugins,
-  String        $apache_servername,
-  Array[String] $apache_serveraliases,
-  String        $apache_docroot,
-  Hash          $apache_docroot_directory,
-  Hash          $apache_content_directory,
-  Hash          $apache_api_directory,
-  Hash          $apache_api_directory_status,
-  Hash          $apache_proxy_pass_static,
-  Hash          $apache_basicauth,
+  Boolean               $manage_repo,
+  Pattern['^\d+\.\d+$'] $version,
+  Boolean               $manage_firewall_entry,
+  Boolean               $manage_sd_service,
+  Array                 $sd_service_tags,
+  String                $pulp_data_device,
+  String                $postgres_data_device,
+  String                $postgres_backup_device,
+  Array                 $plugins,
+  String                $apache_servername,
+  Array[String]         $apache_serveraliases,
+  String                $apache_docroot,
+  Hash                  $apache_docroot_directory,
+  Hash                  $apache_content_directory,
+  Hash                  $apache_api_directory,
+  Hash                  $apache_api_directory_status,
+  Hash                  $apache_proxy_pass_static,
+  Hash                  $apache_basicauth,
 ) {
   if $manage_repo {
-    include pulpcore::repo
+    include profile_pulp::repo
   }
 
   exec { '/var/lib/pulp':

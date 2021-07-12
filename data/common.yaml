@@ -1,5 +1,6 @@
 ---
 profile_pulp::manage_repo: true
+profile_pulp::version: '3.14'
 profile_pulp::manage_firewall_entry: true
 profile_pulp::manage_sd_service: true
 profile_pulp::sd_service_tags: []
@@ -14,9 +15,7 @@ profile_pulp::plugins:
   # Apache config
 profile_pulp::apache_docroot: '/var/lib/pulp/pulpcore_static'
 profile_pulp::apache_servername: "%{facts.networking.fqdn}"
-profile_pulp::apache_serveraliases:
-  - mirror.vagrant.beeckmans.io
-  - registry.vagrant.beeckmans.io
+profile_pulp::apache_serveraliases: []
 profile_pulp::apache_docroot_directory:
   provider: 'Directory'
   path: "%{hiera('profile_pulp::apache_docroot')}"
