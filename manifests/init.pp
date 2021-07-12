@@ -20,9 +20,7 @@ class profile_pulp (
   Hash                  $apache_basicauth,
 ) {
   if $manage_repo {
-    class { 'profile_pulp::repo':
-      before => Class['Pulpcore'],
-    }
+    include profile_pulp::repo
   }
 
   exec { '/var/lib/pulp':
@@ -48,6 +46,7 @@ class profile_pulp (
   }
 
   include profile_pulp::apache
+  include profile_pulp::cli
 
   class { 'pulpcore':
     apache_http_vhost  => false,

@@ -9,7 +9,7 @@ class profile_pulp::repo (
     'dist_tag' => "el${facts['os']['release']['major']}",
   }
 
-  file { '/etc/yum.repos.d/pulpcore.repo':
+  file { '/etc/yum.repos.d/pulp.repo':
     ensure  => file,
     owner   => 'root',
     group   => 'root',
