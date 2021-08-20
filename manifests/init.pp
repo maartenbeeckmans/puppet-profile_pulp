@@ -1,7 +1,6 @@
 #
 class profile_pulp (
   Boolean               $manage_repo,
-  Pattern['^\d+\.\d+$'] $version,
   Boolean               $manage_firewall_entry,
   Boolean               $manage_sd_service,
   Array                 $sd_service_tags,
@@ -20,7 +19,7 @@ class profile_pulp (
   Hash                  $apache_basicauth,
 ) {
   if $manage_repo {
-    include profile_pulp::repo
+    include pulpcore::repo
   }
 
   exec { '/var/lib/pulp':

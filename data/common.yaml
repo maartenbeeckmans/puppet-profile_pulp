@@ -1,6 +1,5 @@
 ---
 profile_pulp::manage_repo: true
-profile_pulp::version: '3.14'
 profile_pulp::manage_firewall_entry: true
 profile_pulp::manage_sd_service: true
 profile_pulp::sd_service_tags: []
