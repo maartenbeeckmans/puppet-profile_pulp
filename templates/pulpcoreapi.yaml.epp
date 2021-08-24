@@ -1,0 +1,12 @@
+<%- | String $servername,
+      String $admin_username,
+      String $admin_password,
+| -%>
+# Managed by Puppet
+---
+scheme: https
+host: <%= $servername %>
+ssl_verify: false
+username: <%= $admin_username %>
+password: <%= $admin_password %>
+...

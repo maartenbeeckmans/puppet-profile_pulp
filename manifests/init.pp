@@ -57,4 +57,18 @@ class profile_pulp (
   }
 
   include profile_pulp::helperscripts
+
+  $_pulpcoreapi_config = {
+    'servername'     => $servername,
+    'admin_username' => keys($apache_basicauth)[0],
+    'admin_password' => values($apache_basicauth)[0],
+  }
+
+  file { '/etc/puppetlabs/puppet/pulpcoreapi.yaml':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0400',
+    content => epp("${module_name}/pulpcoreapi.yaml.epp", $_pulpcoreapi_config),
+  }
 }

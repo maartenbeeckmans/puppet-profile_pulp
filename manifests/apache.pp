@@ -72,6 +72,6 @@ class profile_pulp::apache (
     owner   => 'root',
     group   => 'root',
     mode    => '0600',
-    content => epp("${module_name}/netrc", $_netrc_hash),
+    content => epp("${module_name}/netrc.epp", $_netrc_hash),
   }
 }
