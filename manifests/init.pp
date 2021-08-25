@@ -59,7 +59,7 @@ class profile_pulp (
   include profile_pulp::helperscripts
 
   $_pulpcoreapi_config = {
-    'servername'     => $servername,
+    'servername'     => $apache_servername,
     'admin_username' => keys($apache_basicauth)[0],
     'admin_password' => values($apache_basicauth)[0],
   }
