@@ -48,8 +48,10 @@ class profile_pulp (
   include profile_pulp::cli
 
   class { 'pulpcore':
-    apache_http_vhost  => false,
-    apache_https_vhost => false,
+    allowed_content_checksums => ['md5', 'sha1', 'sha224', 'sha256', 'sha384', 'sha512'],
+    apache_http_vhost         => false,
+    apache_https_vhost        => false,
+    cache_enabled             => true,
   }
 
   $plugins.each |$plugin| {
