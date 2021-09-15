@@ -15,7 +15,9 @@ class profile_pulp (
   Hash                  $apache_content_directory,
   Hash                  $apache_api_directory,
   Hash                  $apache_api_directory_status,
+  Hash                  $apache_container_directory,
   Hash                  $apache_proxy_pass_static,
+  Hash                  $apache_container_proxy_pass,
   Hash                  $apache_basicauth,
 ) {
   if $manage_repo {

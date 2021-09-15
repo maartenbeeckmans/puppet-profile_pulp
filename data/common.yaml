@@ -59,9 +59,26 @@ profile_pulp::apache_api_directory_status:
     - url: 'unix:///run/pulpcore-api.sock|http://pulpcore-api/pulp/api/v3/status'
       params:
         timeout: '600'
+profile_pulp::apache_container_directory:
+  path: '/pulpcore_registry/v2/'
+  provider: 'location'
+  proxy_pass:
+    - url: 'unix:///run/pulpcore-api.sock|http://pulpcore-api/v2/'
+  rewrites:
+    - comment: ' Set headers for pulp'
+      rewrite_cond: 
+        - "%{literal('%')}{IS_SUBREQ} ^false$"
+        - "%{literal('%')}{LA-U:REMOTE_USER} (.+)"
+      rewrite_rule: 
+        - '. - [E=RU:%1]'
+  request_headers:
+    - "set REMOTE_USER %{literal('%')}{RU}e"
 profile_pulp::apache_proxy_pass_static:
   path: '/assets/'
   url: 'unix:///run/pulpcore-api.sock|http://pulpcore-api/assets/'
+profile_pulp::apache_container_proxy_pass:
+  path: '/pulp/container/'
+  url: 'unix:///run/pulpcore-api.sock|http://pulpcore-content/pulp/container/'
 profile_pulp::apache_basicauth:
   # admin:secret
   admin: secret
