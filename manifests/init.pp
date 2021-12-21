@@ -47,7 +47,6 @@ class profile_pulp (
   }
 
   include profile_pulp::apache
-  include profile_pulp::cli
 
   class { 'pulpcore':
     allowed_content_checksums => ['md5', 'sha1', 'sha224', 'sha256', 'sha384', 'sha512'],
