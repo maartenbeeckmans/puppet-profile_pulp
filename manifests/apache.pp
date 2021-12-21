@@ -63,18 +63,4 @@ class profile_pulp::apache (
     owner   => $::apache::user,
     mode    => '0400',
   }
-
-  $_netrc_hash = {
-    'servername'     => $servername,
-    'admin_username' => keys($basicauth)[0],
-    'admin_password' => values($basicauth)[0],
-  }
-
-  file { '/root/.netrc':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0600',
-    content => epp("${module_name}/netrc.epp", $_netrc_hash),
-  }
 }

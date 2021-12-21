@@ -6,4 +6,4 @@
 ENDPOINT=$1
 DATA=$2
 
-curl -k -s --netrc -L -X POST -H "Content-Type: application/json" "https://<%= $api_address -%>:<%= $api_port -%>/pulp/api/v3/${ENDPOINT}/" -d "${DATA}" | jq
+curl -k -s --netrc -L -X POST -H "Content-Type: application/json" "https://<%= $api_address -%>:<%= $api_port -%>${ENDPOINT}" -d "${DATA}" | jq

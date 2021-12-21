@@ -4,7 +4,7 @@
 class profile_pulp::helperscripts (
   String $servername = $::profile_pulp::apache_servername,
 ) {
-  $_helperscripts = [ 'pcurlg', 'pcurlp', 'pcurlf', 'pulp_clean_orphans' ]
+  $_helperscripts = [ 'pcurlg', 'pcurlp', 'pcurlf' ]
 
   $_config = {
     'api_address' => $servername,

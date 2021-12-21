@@ -1,8 +1,0 @@
-<%- | String $servername,
-      String $admin_username,
-      String $admin_password,
-| -%>
-# Managed by Puppet
-machine <%= $servername %> 
-login <%= $admin_username %> 
-password <%= $admin_password %> 
